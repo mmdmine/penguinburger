@@ -1,0 +1,3 @@
+package: penguinburger.musl_gcc
+name: GNU Compiler Collection for musl
+author: penguinburger

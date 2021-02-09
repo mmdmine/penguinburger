@@ -1,0 +1,3 @@
+package: penguinburger.system.musl
+name: musl's Standard C Library for Penguinburger
+author: penguinburger
