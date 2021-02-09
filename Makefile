@@ -1,19 +1,21 @@
-gcc:
-	$(MAKE) -C gcc
+CC=x86_64-linux-musl-gcc
+
+libc:
+	$(MAKE) -C libc
 
 kernel: gcc
 	$(MAKE) -C kernel
 
-libc: gcc
-	$(MAKE) -C libc
+gcc: libc
+	$(MAKE) -C gcc
 
-init: libc
+init: libc gcc
 	$(MAKE) -C init
 
-pm: libc
+pm: libc gcc
 	$(CMAKE) -C pm
 
-shell: libc
+shell: libc gcc
 	$(CMAKE) -C shell
 
 root: gcc kernel libc init pm shell
