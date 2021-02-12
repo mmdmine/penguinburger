@@ -22,7 +22,7 @@ signal_handler_type handlers[65] = {
 static void handler(int sig) {
 	signal_handler_type handler = handlers[sig];
 	if (handler != NULL) {
-		(*handler)();
+		handler();
 	}
 }
 
