@@ -8,7 +8,7 @@ pid_t pm_start(const char *pkg) {
 	// TODO: Implement a library for using PackageManager
 	
 	char *path = "/System/Applications/penguinburger.system.pm/Content/PackageManager";
-	char *args[] = { path, "penguinburger.shell", "run", "shell" };
+	char *args[] = { path, "run", "penguinburger.shell" };
 	char *env[] = { 
 		"HOME=/Users/root",
 	};

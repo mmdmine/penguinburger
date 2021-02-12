@@ -1,6 +1,7 @@
-package: penguinburger.shell
-name: Penguinburger Command Line Shell
-author: penguinburger
+package: "penguinburger.shell"
+name: "Penguinburger Command Line Shell"
+author: "penguinburger"
+main: "Content/Shell"
 export: {
 	"shell": "Content/Shell"
 }
