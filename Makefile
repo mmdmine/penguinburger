@@ -1,34 +1,49 @@
-CC=x86_64-linux-musl-gcc
+CC = x86_64-linux-musl-gcc
 
-libc:
-	$(MAKE) -C libc
+BUILDDIR = $(CURDIR)/build
+DISTDIR = $(BUILDDIR)/root
 
-kernel: gcc
+all: $(DISTDIR)
+
+kernel:
 	$(MAKE) -C kernel
 
-gcc: libc
-	$(MAKE) -C gcc
+core: pm
+	$(MAKE) -C core
 
-init: libc gcc
-	$(MAKE) -C init
+pm:
+	$(MAKE) -C pm
 
-pm: libc gcc
-	$(CMAKE) -C pm
+shell: pm
+	$(MAKE) -C shell
 
-shell: libc gcc
-	$(CMAKE) -C shell
+$(DISTDIR): core pm shell kernel
+	mkdir -p $(DISTDIR)/Applications
+	mkdir -p $(DISTDIR)/Users
+	mkdir -p $(DISTDIR)/System/Applications
+	mkdir -p $(DISTDIR)/System/Devices
+	mkdir -p $(DISTDIR)/System/Processes
+	mkdir -p $(DISTDIR)/System/Sys
+	mkdir -p $(DISTDIR)/System/Config
+	$(MAKE) -C kernel install DISTDIR=$(DISTDIR)
+	$(MAKE) -C core install DISTDIR=$(DISTDIR)
+	$(MAKE) -C pm install DISTDIR=$(DISTDIR)
+	$(MAKE) -C shell install DISTDIR=$(DISTDIR)
 
-root: gcc kernel libc init pm shell
-	mkdir -p build/root/Applications
-	mkdir -p build/root/Users
-	mkdir -p build/root/System/Applications
-	mkdir -p build/root/System/Devices
-	mkdir -p build/root/System/Processes
-	mkdir -p build/root/System/Sys
-	mkdir -p build/root/System/Config
-	# TODO: install pm in build/root
-	# TODO: use pm and chroot to install system packages
+$(BUILDDIR)/ramdisk.cpio: $(DISTDIR)
+	cd $^;\
+	find . | cpio -ov --format=newc > $@
 
-all: root
+ramdisk: $(BUILDDIR)/ramdisk.cpio
 
-.PHONY: gcc kernel libc init pm shell root all
+run: $(BUILDDIR)/ramdisk.cpio
+	qemu-system-x86_64 -kernel /boot/vmlinuz-linux -initrd $(BUILDDIR)/ramdisk.cpio -append "rdinit=/System/Applications/penguinburger.system.core/Content/Init console=ttyS0" -serial stdio -display none
+
+clean:
+	rm -rf $(BUILDDIR)
+	$(MAKE) -C kernel clean
+	$(MAKE) -C core clean
+	$(MAKE) -C pm clean
+	$(MAKE) -C shell clean
+
+.PHONY: core pm shell kernel all clean run ramdisk $(DISTDIR) $(BUILDDIR)/ramdisk.cpio

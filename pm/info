@@ -1,3 +1,6 @@
 package: penguinburger.system.pm
 name: Penguinburger Package Manager
 author: penguinburger
+export: {
+	"pm": "Content/PackageManager"
+}

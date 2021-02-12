@@ -1,3 +1,6 @@
 package: penguinburger.shell
 name: Penguinburger Command Line Shell
 author: penguinburger
+export: {
+	"shell": "Content/Shell"
+}

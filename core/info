@@ -1,0 +1,7 @@
+package: penguinburger.system.core
+name: Penguinburger Core
+author: penguinburger
+export: {
+	"reboot": "Content/Reboot",
+	"shutdown": "Content/Shutdown",
+}
