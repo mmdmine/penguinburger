@@ -1,18 +1,16 @@
-#include<private/init.h>
-#include<sys/types.h>
-#include<unistd.h>
-#include<errno.h>
 #include<stdio.h>
+#include<errno.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<private/init.h>
 
 pid_t pm_start(const char *pkg) {
-	// TODO: run the package in real
-	// Package Manager is not implemented, so just run busybox
-
-	char *path = "/Applications/busybox/Content/busybox";
-	char *args[] = { path, "ash" };
+	// TODO: Implement a library for using PackageManager
+	
+	char *path = "/System/Applications/penguinburger.system.pm/Content/PackageManager";
+	char *args[] = { path, "penguinburger.shell", "run", "shell" };
 	char *env[] = { 
 		"HOME=/Users/root",
-		"PATH=/Applications/busybox/Content:/System/Applications/penguinburger.system.init/Content"
 	};
 	
 	pid_t status = fork();
